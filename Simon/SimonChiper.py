@@ -1,9 +1,13 @@
 from __future__ import print_function
-import timeit
-import binascii
+from random import randint
+from time import sleep
 from collections import deque
+import paho.mqtt.client as mqtt
 
-# mycode='''
+mqttBroker ="192.168.1.7"
+client = mqtt.Client("Publisher")
+client.connect(mqttBroker)
+
 
 
 class SimonCipher(object):
@@ -26,7 +30,7 @@ class SimonCipher(object):
 
     __valid_modes = ['ECB', 'CTR', 'CBC', 'PCBC', 'CFB', 'OFB']
 
-     __init__(self, key, key_size=128, block_size=128, mode='ECB', init=0, counter=0):
+    def __init__(self, key, key_size=128, block_size=128, mode='ECB', init=0, counter=0):
         """
         Initialize an instance of the Simon block cipher.
         :param key: Int representation of the encryption key
@@ -374,24 +378,12 @@ class SimonCipher(object):
 
 
 if __name__ == "__main__":
-    mess = 'TelkomUniversity'
-    print("Message \t\t\t:\t", mess)
-
-    ciphers = SimonCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 192, 128, 'ECB')
-    t = ciphers.encrypt(int.from_bytes(mess.encode(), byteorder='big'))
-    print("Encrypted\t\t\t:\t", hex(t))
-
-    scale = 16
-    res = bin(int(hex(t), scale)).zfill(8)
-    print("Encrypted binary\t:\t", str(res))
-
-    dec = ciphers.decrypt(t)
-    hexstr = hex(dec)
-    dec_str = bytes.fromhex(hexstr[2:]).decode('utf-8')
-    print("Decrypted\t\t\t:\t", dec_str)
-    print("Decrypted\t\t\t:\t", hexstr)
-
-# '''
-# print("Time:\t",timeit.timeit( stmt= mycode,
-#                               number = 100))
+    while True:
+        for _ in range(100):
+            cipher = SimonCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
+            g = cipher.encrypt(randint(60, 100))
+            print("Encrypted\t\t\t:\t", hex(g))
+            client.publish("RANDOM", g)
+            print("Just published " + str(g) + " to topic RANDOM")
+            sleep(3)
 
