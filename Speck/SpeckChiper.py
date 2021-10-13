@@ -1,8 +1,8 @@
 from __future__ import print_function
-import timeit
 import binascii
-
-#mycode='''
+from random import randint
+from time import sleep
+import paho.mqtt.client as mqtt
 
 class SpeckCipher(object):
     """Speck Block Cipher Object"""
@@ -311,23 +311,27 @@ class SpeckCipher(object):
     def getBinary(word):
         return int(binascii.hexlify(word), 16)
 
+# mqttBroker ="192.168.1.7" 
+# client = mqtt.Client("Publisher")
+# client.connect(mqttBroker) 
 
 if __name__ == "__main__":
-    mess = 'MBCLap'
-    print("Message \t\t\t:\t", mess)
-    cipher = SpeckCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
-    g = cipher.encrypt(int.from_bytes(mess.encode(), byteorder='big'))
-    print("Encrypted\t\t\t:\t", hex(g))
+    for _ in range(100):
+        mess = randint(60,100)
+        print("Message \t\t\t:\t", mess)
+        cipher = SpeckCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
+        g = cipher.encrypt(int.from_bytes(mess.encode(), byteorder='big'))
+        print("Encrypted\t\t\t:\t", hex(g))
 
-    scale = 16
-    res = bin(int(hex(g), scale)).zfill(8)
-    print("Encrypted binary\t:\t", str(res))
+        scale = 16
+        res = bin(int(hex(g), scale)).zfill(8)
+        print("Encrypted binary\t:\t", str(res))
 
-    dec = cipher.decrypt(g)
-    hexstr = hex(dec)
-    dec_str = bytes.fromhex(hexstr[2:]).decode('utf-8')
-    print("Decrypted\t\t\t:\t", dec_str)
-    print("Decrypted\t\t\t:\t", hexstr)
+    # dec = cipher.decrypt(g)
+    # hexstr = hex(dec)
+    # dec_str = bytes.fromhex(hexstr[2:]).decode('utf-8')
+    # print("Decrypted\t\t\t:\t", dec_str)
+    # print("Decrypted\t\t\t:\t", hexstr)
 
 # '''
 # print("Time:\t",timeit.timeit( stmt= mycode,
