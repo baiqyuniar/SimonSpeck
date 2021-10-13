@@ -26,7 +26,7 @@ class SimonCipher(object):
 
     __valid_modes = ['ECB', 'CTR', 'CBC', 'PCBC', 'CFB', 'OFB']
 
-    def __init__(self, key, key_size=128, block_size=128, mode='ECB', init=0, counter=0):
+     __init__(self, key, key_size=128, block_size=128, mode='ECB', init=0, counter=0):
         """
         Initialize an instance of the Simon block cipher.
         :param key: Int representation of the encryption key
