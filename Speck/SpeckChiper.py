@@ -311,21 +311,32 @@ class SpeckCipher(object):
     def getBinary(word):
         return int(binascii.hexlify(word), 16)
 
-# mqttBroker ="192.168.1.7" 
-# client = mqtt.Client("Publisher")
-# client.connect(mqttBroker) 
+mqttBroker ="192.168.1.7"
+client = mqtt.Client("Publisher")
+client.connect(mqttBroker)
 
 if __name__ == "__main__":
-    for _ in range(100):
-        mess = randint(60,100)
-        print("Message \t\t\t:\t", mess)
-        cipher = SpeckCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
-        g = cipher.encrypt(int.from_bytes(mess.encode(), byteorder='big'))
-        print("Encrypted\t\t\t:\t", hex(g))
-
-        scale = 16
-        res = bin(int(hex(g), scale)).zfill(8)
-        print("Encrypted binary\t:\t", str(res))
+    while True:
+        for _ in range(100):
+            cipher = SpeckCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'CBC')
+            g = cipher.encrypt(randint(60, 100))
+            print("Encrypted\t\t\t:\t", hex(g))
+            # dec = cipher.decrypt(g)
+            # hexstr = hex(dec)
+            # print("Decrypted\t\t\t:\t", hexstr)
+            client.publish("RANDOM", g)
+            print("Just published " + str(g) + " to topic RANDOM")
+            sleep(3)
+    # for _ in range(100):
+    #     mess = randint(60,100)
+    #     print("Message \t\t\t:\t", mess)
+    #     cipher = SpeckCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'CBC')
+    #     g = cipher.encrypt(int.from_bytes(mess.encode(), byteorder='big'))
+    #     print("Encrypted\t\t\t:\t", hex(g))
+    #
+    #     scale = 16
+    #     res = bin(int(hex(g), scale)).zfill(8)
+    #     print("Encrypted binary\t:\t", str(res))
 
     # dec = cipher.decrypt(g)
     # hexstr = hex(dec)
