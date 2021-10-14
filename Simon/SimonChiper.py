@@ -381,7 +381,9 @@ if __name__ == "__main__":
     while True:
         for _ in range(100):
             cipher = SimonCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
-            g = cipher.encrypt(randint(60, 100))
+            mess = randint(60, 100)
+            print("Pesan yang dikirim\t:",mess)
+            g = cipher.encrypt(mess)
             print("Encrypted\t\t\t:\t", hex(g))
             client.publish("RANDOM", g)
             print("Just published " + str(g) + " to topic RANDOM")
