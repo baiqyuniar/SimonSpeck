@@ -257,16 +257,16 @@ class SimonCipher(object):
 
 if __name__ == "__main__":
     while True:
+        for _ in range(100):
+            cipher = SimonCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
+            client.subscribe("RANDOM")
+            msg = client.on_message
 
-        cipher = SimonCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
-        client.subscribe("RANDOM")
+            def on_message(message):
+                msg = str(message.payload.decode("utf-8"))
+                dec = cipher.decrypt(msg)
+                hexstr = hex(dec)
+                print("Decrypted\t\t\t:\t", hexstr)
 
-        def on_message(message):
-            msg = str(message.payload.decode("utf-8"))
-            dec = cipher.decrypt(msg)
-            hexstr = hex(dec)
-            print("Decrypted\t\t\t:\t", hexstr)
-
-        msg = client.on_message
 
         

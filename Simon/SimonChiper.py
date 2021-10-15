@@ -385,7 +385,7 @@ if __name__ == "__main__":
             print("Pesan yang dikirim\t:",mess)
             g = cipher.encrypt(mess)
             print("Encrypted\t\t\t:\t", hex(g))
-            client.publish("RANDOM", g)
-            print("Just published " + str(g) + " to topic RANDOM")
+            client.publish("RANDOM", hex(g))
+            print("Just published " + hex(g) + " to topic RANDOM")
             sleep(3)
 
