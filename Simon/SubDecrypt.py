@@ -255,44 +255,18 @@ class SimonCipher(object):
                 raise
         return self.iv
 
-
-# if __name__ == "__main__":
-#     while True:
-#         for _ in range(100):
-#             cipher = SimonCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
-#             mess = randint(60, 100)
-#             print("Pesan yang dikirim\t:",mess)
-#             g = cipher.encrypt(mess)
-#             print("Encrypted\t\t\t:\t", hex(g))
-#             client.publish("RANDOM", g)
-#             print("Just published " + str(g) + " to topic RANDOM")
-#             sleep(3)
-
 if __name__ == "__main__":
     while True:
 
         cipher = SimonCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
-
-        # def on_message(message):
-        #     msg = str(message.payload.decode("utf-8"))
-
         client.subscribe("RANDOM")
+
+        def on_message(message):
+            msg = str(message.payload.decode("utf-8"))
+            dec = cipher.decrypt(msg)
+            hexstr = hex(dec)
+            print("Decrypted\t\t\t:\t", hexstr)
+
         msg = client.on_message
 
-        dec = cipher.decrypt(msg.message.payload.decode("utf-8"))
-        hexstr = hex(dec)
-        print("Decrypted\t\t\t:\t", hexstr)
-
-        # def on_message(message):
-        #     msg = str(message.payload.decode("utf-8"))
-            
-        for _ in range(100):
-            cipher = SimonCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
-            mess = randint(60, 100)
-            print("Pesan yang dikirim\t:",mess)
-            g = cipher.encrypt(mess)
-            print("Encrypted\t\t\t:\t", hex(g))
-            client.publish("RANDOM", g)
-            print("Just published " + str(g) + " to topic RANDOM")
-            sleep(3)
-
+        
