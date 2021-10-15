@@ -257,7 +257,7 @@ class SimonCipher(object):
 
 if __name__ == "__main__":
     cipher = SimonCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
-    def on_message(message):
+    def on_message(client, userdata, message):
         msg = str(message.payload.decode("utf-8"))
         dec = cipher.decrypt(msg)
         hexstr = hex(dec)
